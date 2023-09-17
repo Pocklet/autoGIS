@@ -90,32 +90,54 @@ print(polygonLength)
 print(data.head())
 
 
+# format column names
+new_column_names = ["x", "y"]
 
-# formating data columns
-# new_column_names = [
-#     "from_id","to_id","fromid_toid","route_number","at",
-#     "from_x","from_y","to_x","to_y","total_route_time",
-#     "route_time","route_distance","route_total_lines"
-#     ]
-
-# data.columns = new_column_names
-# print(data.head())
-
-subset = data[["from_x", "from_y", "to_x", "to_y", "total_route_time"]]
-print(subset.head())
-
-
-# formatting data
-print(subset.dtypes)
 
 # creating lists for origin and destination
 origin_points = []
 destination_points = []
 
-for i in range(len(subset)):
-    x = subset["from_x"], 
-    y = subset["from_y"],
-    z = create_point_geometry(x, y),
-    origin_points.append(z)
+
+# define point function
+def create_point(row):
+    point = Point(row["x"], row["y"])
+    return point
+
+
+
+# subset
+origin_points = data[["from_x", "from_y"]]
+origin_points.columns = new_column_names
 
 print(origin_points)
+
+# creates points from x and y data
+point_series = origin_points.apply(
+    lambda row: Point(row["x"], row["y"]),
+    axis=1
+)
+
+origin_points = point_series
+print(origin_points)
+
+
+
+# subset
+destination_points = data[["to_x", "to_y"]]
+destination_points.columns = new_column_names
+
+print(destination_points)
+
+# creates point from x and y data
+point_series2 = destination_points.apply(
+    lambda row: Point(row["x"], row["y"]),
+    axis=1
+)
+
+destination_points = point_series2
+print(destination_points)
+
+
+print("ORIGIN X Y:", origin_points[0].x, origin_points[0].y)
+print("DESTINATION X Y:", destination_points[0].x, destination_points[0].y)
