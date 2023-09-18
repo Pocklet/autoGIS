@@ -141,3 +141,22 @@ print(destination_points)
 
 print("ORIGIN X Y:", origin_points[0].x, origin_points[0].y)
 print("DESTINATION X Y:", destination_points[0].x, destination_points[0].y)
+
+
+
+# create list for lines
+lines = []
+total_length = 0
+
+# generate line geometries
+for start, stop in zip(origin_points, destination_points):
+    lines.append(LineString([start, stop]))
+    
+for i in range(len(lines)):
+    line_length = lines[i].length
+    total_length = total_length + line_length
+
+print(total_length)
+
+
+
